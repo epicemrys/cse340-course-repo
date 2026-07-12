@@ -2,12 +2,18 @@
 
 <main>
     <h1><%= title %></h1>
-    <h2>Welcome to the CSE 340 Service Network!</h2>
     <h2>Upcoming Service Projects</h2>
     <ul>
-        <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-        <li>Food Drive - Help collect and distribute food to those in need.</li>
-        <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
+        <% projects.forEach(project => { %>
+            <li>
+                <%= new Intl.DateTimeFormat('en-US', {
+                    dateStyle: 'long',
+                    timeZone: 'UTC'
+                }).format(new Date(project.project_date)) %>:
+                <strong><%= project.title %></strong>
+                (<%= project.organization_name %>)
+            </li>
+        <% }); %>
     </ul>
 
     <img class="main-logo" src="images/cse340-service-network.png" alt="CSE 340 Service Network Logo">

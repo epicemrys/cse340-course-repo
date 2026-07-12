@@ -3,6 +3,7 @@ import path from 'path';
 import express from 'express';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 
 
 // Define the application environment
@@ -48,9 +49,16 @@ app.get('/organizations', async (req, res, next) => {
   }
 });
 
-app.get('/projects', async (req, res) => {
+app.get('/projects', async (req, res, next) => {
+  try {
+    const projects = await getAllProjects();
     const title = 'Service Projects';
-    res.render('projects', { title });
+
+    console.log('Service projects:', projects);
+    res.render('projects', { title, projects });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/categories', async (req, res) => {
