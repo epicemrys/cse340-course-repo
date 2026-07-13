@@ -80,3 +80,89 @@ JOIN (
         ('UnityServe Volunteers', 'Winter Clothing Collection', 'Collect and organize warm clothing for families in need.', 'UnityServe Donation Center', DATE '2026-11-07')
 ) AS project (organization_name, title, description, location, project_date)
     ON organization.name = project.organization_name;
+
+
+
+-- ============================================================
+-- Service project categories
+-- ============================================================
+CREATE TABLE service_category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Junction table for the many-to-many relationship between
+-- service projects and categories.
+CREATE TABLE service_project_category (
+    project_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    CONSTRAINT pk_service_project_category
+        PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project_category_project
+        FOREIGN KEY (project_id)
+        REFERENCES service_project (project_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_project_category_category
+        FOREIGN KEY (category_id)
+        REFERENCES service_category (category_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+-- The primary key indexes lookups beginning with project_id. This
+-- additional index supports lookups beginning with category_id.
+CREATE INDEX idx_service_project_category_category_id
+    ON service_project_category (category_id);
+
+
+-- ============================================================
+-- Service project categories
+-- ============================================================
+INSERT INTO service_category (name)
+VALUES
+    ('Construction and Accessibility'),
+    ('Environment and Sustainability'),
+    ('Education and Mentoring'),
+    ('Community Support');
+
+
+
+-- ============================================================
+-- Associate every Service project with at least one category.
+-- Some projects receive multiple categories to demonstrate the
+-- many-to-many relationship. IDs are resolved from existing data.
+-- ============================================================
+INSERT INTO service_project_category (project_id, category_id)
+SELECT
+    service_project.project_id,
+    service_category.category_id
+FROM (
+    VALUES
+        ('Community Center Painting', 'Construction and Accessibility'),
+        ('Community Center Painting', 'Community Support'),
+        ('Neighborhood Ramp Build', 'Construction and Accessibility'),
+        ('Playground Repair Day', 'Construction and Accessibility'),
+        ('School Garden Shed Build', 'Construction and Accessibility'),
+        ('School Garden Shed Build', 'Environment and Sustainability'),
+        ('Community Roof Repair', 'Construction and Accessibility'),
+        ('Urban Garden Planting', 'Environment and Sustainability'),
+        ('Composting Workshop', 'Environment and Sustainability'),
+        ('Composting Workshop', 'Education and Mentoring'),
+        ('Fresh Produce Harvest', 'Environment and Sustainability'),
+        ('Fresh Produce Harvest', 'Community Support'),
+        ('School Garden Mentoring', 'Environment and Sustainability'),
+        ('School Garden Mentoring', 'Education and Mentoring'),
+        ('Community Orchard Care', 'Environment and Sustainability'),
+        ('Weekend Food Drive', 'Community Support'),
+        ('Senior Center Activity Day', 'Community Support'),
+        ('Back-to-School Supply Sort', 'Community Support'),
+        ('Back-to-School Supply Sort', 'Education and Mentoring'),
+        ('Community Tutoring Night', 'Education and Mentoring'),
+        ('Community Tutoring Night', 'Community Support'),
+        ('Winter Clothing Collection', 'Community Support')
+) AS association (project_title, category_name)
+INNER JOIN service_project
+    ON service_project.title = association.project_title
+INNER JOIN service_category
+    ON service_category.name = association.category_name;
