@@ -2,21 +2,27 @@
 
 <main>
     <h1><%= title %></h1>
-    <h2>Upcoming Service Projects</h2>
-    <ul>
-        <% projects.forEach(project => { %>
-            <li>
-                <%= new Intl.DateTimeFormat('en-US', {
-                    dateStyle: 'long',
-                    timeZone: 'UTC'
-                }).format(new Date(project.project_date)) %>:
-                <strong><%= project.title %></strong>
-                (<%= project.organization_name %>)
-            </li>
-        <% }); %>
-    </ul>
 
-    <img class="main-logo" src="images/cse340-service-network.png" alt="CSE 340 Service Network Logo">
+    <% if (projects.length > 0) { %>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li>
+                    <%= new Intl.DateTimeFormat('en-US', {
+                        dateStyle: 'long',
+                        timeZone: 'UTC'
+                    }).format(new Date(project.date)) %>:
+                    <a href="/project/<%= project.project_id %>">
+                        <strong><%= project.title %></strong>
+                    </a>
+                    (<a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>)
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>There are no upcoming service projects at this time.</p>
+    <% } %>
+
+    <img class="main-logo" src="/images/cse340-service-network.png" alt="CSE 340 Service Network Logo">
 </main>
 
 <%- include('partials/footer') %>
