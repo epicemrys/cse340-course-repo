@@ -185,6 +185,31 @@ strong {
   color: var(--ink);
 }
 
+.project-categories {
+  margin-top: 16px;
+  color: var(--muted);
+}
+
+.category-tags {
+  display: inline-flex;
+  margin: 0 0 0 8px;
+  padding: 0;
+  list-style: none;
+  gap: 8px;
+  flex-wrap: wrap;
+  vertical-align: middle;
+}
+
+.category-tags a {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid #cfe3da;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
 .main-logo {
   display: block;
   width: min(100%, 520px);

@@ -17,6 +17,20 @@
         <strong>Organization:</strong>
         <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
     </p>
+    <div class="project-categories">
+        <strong>Categories:</strong>
+        <% if (categories.length > 0) { %>
+            <ul class="category-tags">
+                <% categories.forEach(category => { %>
+                    <li>
+                        <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <span>No categories assigned</span>
+        <% } %>
+    </div>
 
     <p><a href="/projects">Back to upcoming service projects</a></p>
 </main>
